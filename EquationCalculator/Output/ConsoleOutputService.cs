@@ -4,8 +4,6 @@ namespace EquationCalculator
 {
 	public class ConsoleOutputService : IOutputService
 	{
-		public void WriteMessage(string message) => Console.WriteLine(message);
-
 		public void WriteResults(double a, double b, double c, (double? x1, double? x2) result)
 		{
 			Console.WriteLine($"{a}x^2 + {b}x + {c} = 0");

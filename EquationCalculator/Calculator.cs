@@ -15,7 +15,7 @@ namespace EquationCalculator
 			_equationSolver = equationSolver;
 		}
 
-		public void Run()
+		public void Calculate()
 		{
 			SolveFromInput();
 		}
@@ -32,7 +32,7 @@ namespace EquationCalculator
 			}
 			catch (Exception ex)
 			{
-				_outputService.WriteMessage($"Ошибка: {ex.Message}");
+				Console.WriteLine(($"Ошибка: {ex.Message}"));
 			}
 		}
 	}
