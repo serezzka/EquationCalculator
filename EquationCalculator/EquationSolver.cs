@@ -1,8 +1,10 @@
-﻿namespace Calculator
+﻿using EquationCalculator.Interfaces;
+
+namespace EquationCalculator
 {
-	public static class EquationSolver
+	public class QuadraticEquationSolver : IEquationSolver
 	{
-		public static (double? x1, double? x2) SolveQuadraticEquation(double a, double b, double c)
+		public (double? x1, double? x2) Solve(double a, double b, double c)
 		{
 			double discriminant = b * b - 4 * a * c;
 

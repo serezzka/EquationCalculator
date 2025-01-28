@@ -1,63 +1,28 @@
-﻿namespace Calculator
+﻿using EquationCalculator.Interfaces;
+
+namespace EquationCalculator
 {
-	public class Calculator
+	public class Program
 	{
-		public static void Main(string[] args)
+		static void Main()
 		{
-			OutputService.WriteMessage("Введите коэффициенты A, B, C в строку через пробел. Если хотите считать данные из файла, просто нажмите Enter");
+			Console.WriteLine("Выберите источник данных (1 - консоль, 2 - файл):");
+			string choice = Console.ReadLine();
 
-			string input = InputService.ReadLineFromConsole();
-
-			if (string.IsNullOrWhiteSpace(input))
+			IInputService inputService;
+			if (choice == "2")
 			{
-				SolveEquationFromFile();
+				Console.WriteLine("Укажите путь к файлу");
+				string filePath = Console.ReadLine();
+				inputService = new FileInputService(filePath);
 			}
 			else
 			{
-				SolveEquationFromConsole(input);
-			}
-		}
-
-		private static void SolveEquationFromConsole(string input)
-		{
-			try
-			{
-				var (a, b, c) = InputService.ParseCoefficients(input);
-				var result = EquationSolver.SolveQuadraticEquation(a, b, c);
-
-				OutputService.WriteResultsToConsole(a, b, c, result);
-			}
-			catch (Exception ex)
-			{
-				OutputService.WriteMessage($"Ошибка: {ex.Message}");
-			}
-		}
-
-		private static void SolveEquationFromFile()
-		{
-			OutputService.WriteMessage("Введите путь к файлу с коэффициентами:");
-			string filePath = InputService.ReadLineFromConsole();
-
-			if (!File.Exists(filePath))
-			{
-				OutputService.WriteMessage("Файл не найден.");
-				return;
+				inputService = new ConsoleInputService();
 			}
 
-			try
-			{
-				var equations = InputService.ReadEquationsFromFile(filePath);
-
-				foreach (var eq in equations)
-				{
-					var result = EquationSolver.SolveQuadraticEquation(eq.a, eq.b, eq.c);
-					OutputService.WriteResultsToConsole(eq.a, eq.b, eq.c, result);
-				}
-			}
-			catch (Exception ex)
-			{
-				OutputService.WriteMessage($"Ошибка: {ex.Message}");
-			}
+			var calculator = new Calculator(inputService, new ConsoleOutputService(), new QuadraticEquationSolver());
+			calculator.Run();
 		}
 	}
 }
